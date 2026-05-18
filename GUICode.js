@@ -7,7 +7,13 @@ const display = document.getElementById("display");
 
 const numberButton = document.querySelectorAll(".number");
 numberButton.forEach(button => {button.addEventListener("click", ()=>{
-    display.textContent += button.textContent;
+    if(display.textContent==="Error" || display.textContent==="0"){
+        display.textContent = "";
+        display.textContent += button.textContent;
+    }
+    else{
+        display.textContent += button.textContent;
+    }
 });
 });
 
@@ -15,7 +21,12 @@ numberButton.forEach(button => {button.addEventListener("click", ()=>{
 
 const operationButton = document.querySelectorAll(".operation");
 operationButton.forEach(button => {button.addEventListener("click", ()=>{
-    display.textContent += " " + button.textContent + " ";
+    if(display.textContent!="Error"){
+        display.textContent += " " + button.textContent + " ";
+    }
+    else{
+        return;
+    }
 });
 });
 
