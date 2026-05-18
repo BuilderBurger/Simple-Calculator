@@ -21,11 +21,12 @@ numberButton.forEach(button => {button.addEventListener("click", ()=>{
 
 const operationButton = document.querySelectorAll(".operation");
 operationButton.forEach(button => {button.addEventListener("click", ()=>{
-    if(display.textContent!="Error"){
-        display.textContent += " " + button.textContent + " ";
+    if(display.textContent==="Error" || /\s[+\*/-]\s/.test(display.textContent)){
+        return;
     }
     else{
-        return;
+        const lastOperator = button.textContent;
+        display.textContent += " " + button.textContent + " ";  
     }
 });
 });
@@ -35,7 +36,7 @@ operationButton.forEach(button => {button.addEventListener("click", ()=>{
 const clearButton = document.getElementById("clear");
 
 clearButton.addEventListener("click", ()=>{
-    display.textContent = "";
+    display.textContent = "0";
 });
 
 
