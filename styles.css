@@ -42,6 +42,7 @@ button.active{
 
 .operation{
     grid-column: span 1;
+    background-color: rgb(211, 194, 250);
 }
 
 #clear{
