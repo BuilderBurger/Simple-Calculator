@@ -2,17 +2,25 @@
 
 const calculator = document.getElementById("Calculator");
 const display = document.getElementById("display");
+let lastNumber = "";
+let lastOperator = "";
 
 // Add event listeners for all number buttons.
 
 const numberButton = document.querySelectorAll(".number");
-numberButton.forEach(button => {button.addEventListener("click", ()=>{
+numberButton.forEach(button => {button.addEventListener("click", () => {
     if(display.textContent==="Error" || display.textContent==="0"){
         display.textContent = "";
         display.textContent += button.textContent;
     }
     else{
-        display.textContent += button.textContent;
+        if(/\s[+\*/-]\s/.test(display.textContent)){
+            display.textContent += button.textContent;
+        }
+        else{
+            display.textContent += button.textContent;
+            lastNumber = display.textContent;
+        }
     }
 });
 });
@@ -20,13 +28,13 @@ numberButton.forEach(button => {button.addEventListener("click", ()=>{
 // Add event listeners for all operation buttons.
 
 const operationButton = document.querySelectorAll(".operation");
-operationButton.forEach(button => {button.addEventListener("click", ()=>{
+operationButton.forEach(button => {button.addEventListener("click", () => {
     if(display.textContent==="Error" || /\s[+\*/-]\s/.test(display.textContent)){
         return;
     }
     else{
-        const lastOperator = button.textContent;
-        display.textContent += " " + button.textContent + " ";  
+        display.textContent += " " + button.textContent + " ";
+        lastOperator = button.textContent; 
     }
 });
 });
@@ -35,8 +43,10 @@ operationButton.forEach(button => {button.addEventListener("click", ()=>{
 
 const clearButton = document.getElementById("clear");
 
-clearButton.addEventListener("click", ()=>{
+clearButton.addEventListener("click", () => {
     display.textContent = "0";
+    lastOperator = "";
+    lastNumber = ""
 });
 
 
@@ -44,12 +54,32 @@ clearButton.addEventListener("click", ()=>{
 
 const equalsButton = document.getElementById("equals");
 
-equalsButton.addEventListener("click", ()=>{
-    const expression = display.textContent;
-    try{
-        const result=eval(expression);
-        display.textContent=result;
-    }catch(error){
-        display.textContent = "Error"
+equalsButton.addEventListener("click", () => {
+    try {
+        if (/\s[+\*/-]\s/.test(display.textContent)) {
+
+            const parts = display.textContent.split(" ");
+
+            const first = parts[0];
+            const operator = parts[1];
+            const second = parts[2];
+
+            lastOperator = operator;
+            lastNumber = second;
+
+            const result = eval(`${first}${operator}${second}`);
+            display.textContent = result;
+        }
+        else if (lastOperator && lastNumber) {
+
+            const result = eval(
+                `${display.textContent}${lastOperator}${lastNumber}`
+            );
+
+            display.textContent = result;
+        }
+    }
+    catch(error) {
+        display.textContent = "Error";
     }
 });
