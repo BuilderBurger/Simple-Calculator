@@ -29,15 +29,32 @@ numberButton.forEach(button => {button.addEventListener("click", () => {
 
 const operationButton = document.querySelectorAll(".operation");
 operationButton.forEach(button => {button.addEventListener("click", () => {
-    if(display.textContent==="Error" || /\s[+\*/-]\s/.test(display.textContent)){
+    if(display.textContent==="Error"){
         return;
     }
+    else if(/\s[+\*/-]\s/.test(display.textContent)){
+        try{
+                const parts = display.textContent.split(" ");
+
+                const first = parts[0];
+                const operator = parts[1];
+                const second = parts[2];
+
+                lastOperator = operator;
+                lastNumber = second;
+
+                const result = eval(`${first}${operator}${second}`);
+                display.textContent = result + " " + button.textContent + " ";
+        }
+        catch(error) {
+            display.textContent = "Error";
+        }}
     else{
         display.textContent += " " + button.textContent + " ";
         lastOperator = button.textContent; 
-    }
+    }});
 });
-});
+
 
 // Add event listener for clear button.
 
